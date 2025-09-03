@@ -1,0 +1,29 @@
+/* style.css */
+#game {
+  width: 600px;
+  height: 200px;
+  background: #2393dd;
+  position: relative;
+  overflow: hidden;
+}
+#dino {
+  width: 40px;
+  height: 40px;
+  background: rgb(180, 54, 124);
+  position: absolute;
+  bottom: 0;
+  left: 50px;
+}
+#obstacle {
+  width: 20px;
+  height: 40px;
+  background: rgb(105, 71, 150);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  animation: move 2s infinite linear;
+}
+@keyframes move {
+  from { right: -20px; }
+  to { right: 600px; }
+}
