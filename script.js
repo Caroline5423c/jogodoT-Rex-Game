@@ -1,74 +1,44 @@
-// script.js
+const dino = document.getElementById("dino");
+const obstaclesContainer = document.getElementById("obstacles");
+
 document.addEventListener("keydown", function(event) {
-  if (event.key === " ") {
-    let dino = document.getElementById("dino");
-    dino.style.bottom = "100px";
-    setTimeout(() => {
-      dino.style.bottom = "0px";
-    }, 500);
-  }
+  if (event.code === "Space") jump();
 });
-const jumpSound = new Audio("sounds/jump.mp3");
-const gameOverSound = new Audio("sounds/gameover.mp3");
-document.addEventListener("keydown", function(event) {
-  if (event.code === "Space") {
-    if (!trex.classList.contains("jump")) {
-      trex.classList.add("jump");
-      jumpSound.play(); // toca o som de pulo
-      setTimeout(() => {
-        trex.classList.remove("jump");
-      }, 500);
+
+function jump() {
+  if (!dino.classList.contains("jump")) {
+    dino.classList.add("jump");
+    setTimeout(() => dino.classList.remove("jump"), 500);
+  }
+}
+
+// Função para criar obstáculos
+function createObstacle() {
+  const cactus = document.createElement("div");
+  cactus.classList.add("cactus");
+  cactus.style.right = "-20px";
+  obstaclesContainer.appendChild(cactus);
+
+  // Verifica colisão
+  const collisionCheck = setInterval(() => {
+    const dinoTop = parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
+    const cactusLeft = cactus.getBoundingClientRect().left;
+
+    if (cactusLeft < 90 && cactusLeft > 50 && dinoTop < 40) {
+      alert("Game Over!");
+      clearInterval(collisionCheck);
+      clearInterval(obstacleInterval);
+      document.querySelectorAll(".cactus").forEach(c => c.remove());
     }
-  }
-});
-setInterval(() => {
-  const trexTop = parseInt(window.getComputedStyle(trex).getPropertyValue("bottom"));
-  const obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("right"));
 
-  if (obstacleLeft > 50 && obstacleLeft < 90 && trexTop < 40) {
-    gameOverSound.play(); // toca o som de fim de jogo
-    alert("Game Over!");
-    obstacle.style.animation = "none";
-    obstacle.style.display = "none";
-  }
-}, 10);
-const trex = document.getElementById("trex");
-const obstacle = document.getElementById("obstacle");
-const scoreDisplay = document.getElementById("score");
-
-let score = 0;
-let isGameOver = false;
-
-// Sons
-const jumpSound = new Audio("sounds/jump.mp3");
-const gameOverSound = new Audio("sounds/gameover.mp3");
-
-document.addEventListener("keydown", function(event) {
-  if (event.code === "Space" && !isGameOver) {
-    if (!trex.classList.contains("jump")) {
-      trex.classList.add("jump");
-      jumpSound.play();
-      setTimeout(() => {
-        trex.classList.remove("jump");
-      }, 500);
+    if (cactusLeft < -20) {
+      cactus.remove();
+      clearInterval(collisionCheck);
     }
-  }
-});
+  }, 10);
+}
 
-setInterval(() => {
-  if (isGameOver) return;
-
-  const trexTop = parseInt(window.getComputedStyle(trex).getPropertyValue("bottom"));
-  const obstacleLeft = parseInt(window.getComputedStyle(obstacle).getPropertyValue("right"));
-
-  if (obstacleLeft > 50 && obstacleLeft < 90 && trexTop < 40) {
-    gameOverSound.play();
-    alert("Game Over!");
-    obstacle.style.animation = "none";
-    obstacle.style.display = "none";
-    isGameOver = true;
-  } else {
-    score++;
-    scoreDisplay.textContent = "Score: " + score;
-  }
-}, 100);
+// Cria obstáculos em intervalos aleatórios
+const obstacleInterval = setInterval(() => {
+  if (Math.random() < 0.6) createObstacle();
+}, 1500);
