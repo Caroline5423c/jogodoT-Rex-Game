@@ -1,21 +1,8 @@
-#obstacles {
+#score {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.cactus {
-  width: 20px;
-  height: 40px;
-  background-color: green;
-  position: absolute;
-  bottom: 0;
-  animation: moveCactus 2s linear forwards;
-}
-
-@keyframes moveCactus {
-  from { right: -20px; }
-  to { right: 600px; }
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
 }
